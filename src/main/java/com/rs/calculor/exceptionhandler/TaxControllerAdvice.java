@@ -16,7 +16,7 @@ public class TaxControllerAdvice {
     public ResponseEntity<MessageExceptionHandler> taxNotFound(TaxNotFoundException taxNotFound){
 
         MessageExceptionHandler error = new MessageExceptionHandler(
-                new Date(), HttpStatus.NOT_FOUND.value(), "Tax percentage is mandatory");
+                HttpStatus.NOT_FOUND.value(), "Tax percentage is mandatory");
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 
@@ -28,7 +28,7 @@ public class TaxControllerAdvice {
     public ResponseEntity<MessageExceptionHandler> parametersExceeded(ParametersExceededException parametersExceededException){
 
         MessageExceptionHandler error = new MessageExceptionHandler(
-                new Date(), HttpStatus.BAD_REQUEST.value(), "Pass only one of the values: grossTaxAmount, totalAmount or taxAmount");
+                HttpStatus.BAD_REQUEST.value(), "Pass only one of the values: grossTaxAmount, totalAmount or taxAmount");
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 
@@ -39,7 +39,7 @@ public class TaxControllerAdvice {
     public ResponseEntity<MessageExceptionHandler> invalidVatException(InvalidVatException invalidVatException){
 
         MessageExceptionHandler error = new MessageExceptionHandler(
-                new Date(), HttpStatus.BAD_REQUEST.value(), "Invalid Vat. Needs to be: 10, 13 or 20");
+                 HttpStatus.BAD_REQUEST.value(), "Invalid Vat. Needs to be: 10, 13 or 20");
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 

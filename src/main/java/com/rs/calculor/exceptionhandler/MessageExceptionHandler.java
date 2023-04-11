@@ -9,7 +9,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class MessageExceptionHandler{
 
-    private Date timestamp;
     private Integer status;
     private String message;
 

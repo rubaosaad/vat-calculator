@@ -6,67 +6,68 @@ import com.rs.calculor.exceptionhandler.ParametersExceededException;
 import com.rs.calculor.exceptionhandler.TaxNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 @Service
 public class TaxCalculatorService {
 
 
     public TaxCalculatorDTO calculate(TaxCalculatorDTO taxCalculatorDTO) {
 
-        if (taxCalculatorDTO.getTaxPercentage()  == 0 ) {
-            throw new TaxNotFoundException();
-        }
-
-
-        if (taxCalculatorDTO.getTaxPercentage() != 10 && taxCalculatorDTO.getTaxPercentage() != 13 && taxCalculatorDTO.getTaxPercentage() != 20 ) {
-            throw new InvalidVatException();
-        }
-
+        checkTaxPercentage(taxCalculatorDTO);
         countNumebs(taxCalculatorDTO);
 
-        if (taxCalculatorDTO.getGrossTaxAmount() != 0) {
+        if (taxCalculatorDTO.getGrossTaxAmount() != null) {
 
-            taxCalculatorDTO.setTaxAmount(taxCalculatorDTO.getGrossTaxAmount()
-                    * taxCalculatorDTO.getTaxPercentage() / 100.0);
 
-            taxCalculatorDTO.setTotalAmount(taxCalculatorDTO.getGrossTaxAmount()
-                    + taxCalculatorDTO.getTaxAmount());
+            taxCalculatorDTO.setTaxAmount(taxCalculatorDTO.getGrossTaxAmount().multiply(taxCalculatorDTO.getTaxPercentage().divide(BigDecimal.valueOf(100))));
 
-        }else if (taxCalculatorDTO.getTaxAmount() != 0) {
+            taxCalculatorDTO.setTaxAmount(taxCalculatorDTO.getTaxAmount().setScale(2, BigDecimal.ROUND_HALF_UP));
 
-            double pGross = taxCalculatorDTO.getTaxAmount() /
-                    taxCalculatorDTO.getTaxPercentage() + taxCalculatorDTO.getTaxAmount();
-            double pTotal = pGross /
-                    (1 + taxCalculatorDTO.getTaxPercentage());
+            taxCalculatorDTO.setTotalAmount(taxCalculatorDTO.getGrossTaxAmount().add(taxCalculatorDTO.getTaxAmount()));
 
-            taxCalculatorDTO.setGrossTaxAmount(pTotal * 100);
+        }else if (taxCalculatorDTO.getTaxAmount() != null) {
 
-            taxCalculatorDTO.setTotalAmount(taxCalculatorDTO.getGrossTaxAmount()
-                    +taxCalculatorDTO.getTaxAmount());
+            BigDecimal pGross = taxCalculatorDTO.getTaxAmount().divide(taxCalculatorDTO.getTaxPercentage().divide(BigDecimal.valueOf(100),2, BigDecimal.ROUND_HALF_UP),2, BigDecimal.ROUND_HALF_UP);
 
-        }else if (taxCalculatorDTO.getTotalAmount() != 0) {
+            taxCalculatorDTO.setGrossTaxAmount(pGross);
 
-            taxCalculatorDTO.setTaxAmount(taxCalculatorDTO.getTotalAmount() /
-                    (1 + (taxCalculatorDTO.getTaxPercentage() / 100))
-                    * (taxCalculatorDTO.getTaxPercentage() / 100));
+            taxCalculatorDTO.setTotalAmount(taxCalculatorDTO.getGrossTaxAmount().add(taxCalculatorDTO.getTaxAmount()));
 
-            taxCalculatorDTO.setGrossTaxAmount(taxCalculatorDTO.getTotalAmount()
-                    - taxCalculatorDTO.getTaxAmount());
+        }else if (taxCalculatorDTO.getTotalAmount() != null) {
+
+            BigDecimal vat = taxCalculatorDTO.getTotalAmount().divide(taxCalculatorDTO.getTaxPercentage().divide(BigDecimal.valueOf(100),2, BigDecimal.ROUND_HALF_UP).add(BigDecimal.valueOf(1)),2, BigDecimal.ROUND_HALF_UP);
+            taxCalculatorDTO.setTaxAmount(taxCalculatorDTO.getTotalAmount().subtract(vat));
+            taxCalculatorDTO.setGrossTaxAmount(vat);
+
         }
 
         return taxCalculatorDTO;
     }
 
+    public void checkTaxPercentage(TaxCalculatorDTO taxCalculatorDTO){
+        if (taxCalculatorDTO.getTaxPercentage() == null) {
+            throw new TaxNotFoundException();
+        }
+
+        if (taxCalculatorDTO.getTaxPercentage().compareTo(BigDecimal.valueOf(10)) != 0
+                && taxCalculatorDTO.getTaxPercentage().compareTo(BigDecimal.valueOf(13)) != 0
+                && taxCalculatorDTO.getTaxPercentage().compareTo(BigDecimal.valueOf(20)) != 0 ) {
+            throw new InvalidVatException();
+        }
+    }
 
     public void countNumebs(TaxCalculatorDTO taxCalculatorDTO){
 
         int count = 0;
-        if (taxCalculatorDTO.getTaxAmount() != 0) {
+        if (taxCalculatorDTO.getTaxAmount() != null) {
             count++;
         }
-        if (taxCalculatorDTO.getGrossTaxAmount() != 0) {
+        if (taxCalculatorDTO.getGrossTaxAmount() != null) {
             count++;
         }
-        if (taxCalculatorDTO.getTotalAmount() != 0) {
+        if (taxCalculatorDTO.getTotalAmount() != null){
             count++;
         }
 

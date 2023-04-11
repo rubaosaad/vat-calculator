@@ -1,14 +1,24 @@
 package com.rs.calculor.controller;
 
+import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
+
 @Data
+@Builder
 public class TaxCalculatorDTO {
 
-    private double taxPercentage;
-    private double grossTaxAmount;
-    private double taxAmount;
-    private double totalAmount;
+    private BigDecimal taxPercentage;
+    private BigDecimal grossTaxAmount;
+    private BigDecimal taxAmount;
+    private BigDecimal totalAmount;
 
 
+    public void getTaxPercentage(BigDecimal valueOf) {
+    }
+
+    public void getGrossTaxAmount(BigDecimal valueOf) {
+    }
 }
