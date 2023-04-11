@@ -1,22 +1,24 @@
 package com.rs.calculor.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.rs.calculor.service.TaxCalculatorService;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
-import java.util.List;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = TaxCalculatorController.class)
 public class TaxControllerTest {
@@ -42,14 +44,23 @@ public class TaxControllerTest {
 
         Mockito.when(taxCalculatorService.calculate(taxCalculatorDTO)).thenReturn(taxCalculatorDTO);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(URI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+        TaxCalculatorDTO service = new TaxCalculatorService().calculate(taxCalculatorDTO);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String jsonReturn = ow.writeValueAsString(service);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonReturn);
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
                 .andReturn();
 
-        Assertions.assertThat(result).isNotNull();
-        String userJson = result.getResponse().getContentAsString();
-        Assertions.assertThat(userJson).isEqualToIgnoringCase(mapper.writeValueAsString(taxCalculatorDTO));
+        JSONAssert.assertEquals("{\"taxPercentage\":13.0,\"grossTaxAmount\":416.69,\"taxAmount\":54.17,\"totalAmount\":470.86}",
+                result.getResponse().getContentAsString(),
+                false);
+
     }
 
     //@Test
@@ -59,14 +70,22 @@ public class TaxControllerTest {
 
         Mockito.when(taxCalculatorService.calculate(taxCalculatorDTO)).thenReturn(taxCalculatorDTO);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(URI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+        TaxCalculatorDTO service = new TaxCalculatorService().calculate(taxCalculatorDTO);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String jsonReturn = ow.writeValueAsString(service);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonReturn);
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
                 .andReturn();
 
-        Assertions.assertThat(result).isNotNull();
-        String userJson = result.getResponse().getContentAsString();
-        Assertions.assertThat(userJson).isEqualToIgnoringCase(mapper.writeValueAsString(taxCalculatorDTO));
+        JSONAssert.assertEquals("{\"taxPercentage\":13.0,\"grossTaxAmount\":416.69,\"taxAmount\":54.17,\"totalAmount\":470.86}",
+                result.getResponse().getContentAsString(),
+                false);
     }
 
     //@Test
@@ -76,14 +95,22 @@ public class TaxControllerTest {
 
         Mockito.when(taxCalculatorService.calculate(taxCalculatorDTO)).thenReturn(taxCalculatorDTO);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(URI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+        TaxCalculatorDTO service = new TaxCalculatorService().calculate(taxCalculatorDTO);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String jsonReturn = ow.writeValueAsString(service);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonReturn);
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
                 .andReturn();
 
-        Assertions.assertThat(result).isNotNull();
-        String userJson = result.getResponse().getContentAsString();
-        Assertions.assertThat(userJson).isEqualToIgnoringCase(mapper.writeValueAsString(taxCalculatorDTO));
+        JSONAssert.assertEquals("{\"taxPercentage\":13.0,\"grossTaxAmount\":416.69,\"taxAmount\":54.17,\"totalAmount\":470.86}",
+                result.getResponse().getContentAsString(),
+                false);
     }
 
     //@Test
@@ -95,7 +122,7 @@ public class TaxControllerTest {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+                        .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
                 .andReturn();
 
         Assertions.assertThat(result).isNotNull();
@@ -110,14 +137,22 @@ public class TaxControllerTest {
 
         Mockito.when(taxCalculatorService.calculate(taxCalculatorDTO)).thenReturn(taxCalculatorDTO);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(URI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+        TaxCalculatorDTO service = new TaxCalculatorService().calculate(taxCalculatorDTO);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String jsonReturn = ow.writeValueAsString(service);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonReturn);
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
                 .andReturn();
 
-        Assertions.assertThat(result).isNotNull();
-        String userJson = result.getResponse().getContentAsString();
-        Assertions.assertThat(userJson).isEqualToIgnoringCase(mapper.writeValueAsString(taxCalculatorDTO));
+        JSONAssert.assertEquals("{\"taxPercentage\":13.0,\"grossTaxAmount\":416.69,\"taxAmount\":54.17,\"totalAmount\":470.86}",
+                result.getResponse().getContentAsString(),
+                false);
     }
 
     //@Test
@@ -127,14 +162,22 @@ public class TaxControllerTest {
 
         Mockito.when(taxCalculatorService.calculate(taxCalculatorDTO)).thenReturn(taxCalculatorDTO);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(URI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+        TaxCalculatorDTO service = new TaxCalculatorService().calculate(taxCalculatorDTO);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String jsonReturn = ow.writeValueAsString(service);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonReturn);
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
                 .andReturn();
 
-        Assertions.assertThat(result).isNotNull();
-        String userJson = result.getResponse().getContentAsString();
-        Assertions.assertThat(userJson).isEqualToIgnoringCase(mapper.writeValueAsString(taxCalculatorDTO));
+        JSONAssert.assertEquals("{\"taxPercentage\":13.0,\"grossTaxAmount\":416.69,\"taxAmount\":54.17,\"totalAmount\":470.86}",
+                result.getResponse().getContentAsString(),
+                false);
     }
 
 
@@ -145,14 +188,22 @@ public class TaxControllerTest {
 
         Mockito.when(taxCalculatorService.calculate(taxCalculatorDTO)).thenReturn(taxCalculatorDTO);
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post(URI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
+        TaxCalculatorDTO service = new TaxCalculatorService().calculate(taxCalculatorDTO);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String jsonReturn = ow.writeValueAsString(service);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonReturn);
+
+        MvcResult result = mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
                 .andReturn();
 
-        Assertions.assertThat(result).isNotNull();
-        String userJson = result.getResponse().getContentAsString();
-        Assertions.assertThat(userJson).isEqualToIgnoringCase(mapper.writeValueAsString(taxCalculatorDTO));
+        JSONAssert.assertEquals("{\"taxPercentage\":13.0,\"grossTaxAmount\":416.69,\"taxAmount\":54.17,\"totalAmount\":470.86}",
+                result.getResponse().getContentAsString(),
+                false);
     }
 
 }
