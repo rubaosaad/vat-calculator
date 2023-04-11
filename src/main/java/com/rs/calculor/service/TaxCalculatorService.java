@@ -21,23 +21,32 @@ public class TaxCalculatorService {
         if (taxCalculatorDTO.getGrossTaxAmount() != null) {
 
 
-            taxCalculatorDTO.setTaxAmount(taxCalculatorDTO.getGrossTaxAmount().multiply(taxCalculatorDTO.getTaxPercentage().divide(BigDecimal.valueOf(100))));
+            taxCalculatorDTO.setTaxAmount(taxCalculatorDTO.getGrossTaxAmount()
+                    .multiply(taxCalculatorDTO.getTaxPercentage()
+                            .divide(BigDecimal.valueOf(100))));
 
             taxCalculatorDTO.setTaxAmount(taxCalculatorDTO.getTaxAmount().setScale(2, BigDecimal.ROUND_HALF_UP));
 
-            taxCalculatorDTO.setTotalAmount(taxCalculatorDTO.getGrossTaxAmount().add(taxCalculatorDTO.getTaxAmount()));
+            taxCalculatorDTO.setTotalAmount(taxCalculatorDTO.getGrossTaxAmount()
+                    .add(taxCalculatorDTO.getTaxAmount()));
 
         }else if (taxCalculatorDTO.getTaxAmount() != null) {
 
-            BigDecimal pGross = taxCalculatorDTO.getTaxAmount().divide(taxCalculatorDTO.getTaxPercentage().divide(BigDecimal.valueOf(100),2, BigDecimal.ROUND_HALF_UP),2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal pGross = taxCalculatorDTO.getTaxAmount()
+                    .divide(taxCalculatorDTO.getTaxPercentage()
+                            .divide(BigDecimal.valueOf(100),2, BigDecimal.ROUND_HALF_UP),2, BigDecimal.ROUND_HALF_UP);
 
             taxCalculatorDTO.setGrossTaxAmount(pGross);
 
-            taxCalculatorDTO.setTotalAmount(taxCalculatorDTO.getGrossTaxAmount().add(taxCalculatorDTO.getTaxAmount()));
+            taxCalculatorDTO.setTotalAmount(taxCalculatorDTO.getGrossTaxAmount()
+                    .add(taxCalculatorDTO.getTaxAmount()));
 
         }else if (taxCalculatorDTO.getTotalAmount() != null) {
 
-            BigDecimal vat = taxCalculatorDTO.getTotalAmount().divide(taxCalculatorDTO.getTaxPercentage().divide(BigDecimal.valueOf(100),2, BigDecimal.ROUND_HALF_UP).add(BigDecimal.valueOf(1)),2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal vat = taxCalculatorDTO.getTotalAmount()
+                    .divide(taxCalculatorDTO.getTaxPercentage()
+                            .divide(BigDecimal.valueOf(100),2, BigDecimal.ROUND_HALF_UP)
+                            .add(BigDecimal.valueOf(1)),2, BigDecimal.ROUND_HALF_UP);
             taxCalculatorDTO.setTaxAmount(taxCalculatorDTO.getTotalAmount().subtract(vat));
             taxCalculatorDTO.setGrossTaxAmount(vat);
 
