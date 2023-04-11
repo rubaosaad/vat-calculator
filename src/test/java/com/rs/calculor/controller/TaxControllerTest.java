@@ -16,26 +16,24 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @WebMvcTest(controllers = TaxCalculatorController.class)
 public class TaxControllerTest {
 
 
+    @Autowired
     private MockMvc mockMvc;
-    private ObjectMapper mapper;
-    private TaxCalculatorDTO taxCalculatorDTO;
 
     @Autowired
-    public TaxControllerTest(MockMvc mockMvc, ObjectMapper mapper, TaxCalculatorDTO taxCalculatorDTO) {
-        this.mockMvc = mockMvc;
-        this.mapper = mapper;
-        this.taxCalculatorDTO = taxCalculatorDTO;
-    }
+    private ObjectMapper mapper;
+
+
+    private TaxCalculatorDTO taxCalculatorDTO;
 
     @MockBean
     private TaxCalculatorService taxCalculatorService;
     private String URI = "/calculator";
-
 
     @Test
     void taxAmountTest() throws Exception {
@@ -156,5 +154,5 @@ public class TaxControllerTest {
         String userJson = result.getResponse().getContentAsString();
         Assertions.assertThat(userJson).isEqualToIgnoringCase(mapper.writeValueAsString(taxCalculatorDTO));
     }
-    
+
 }
